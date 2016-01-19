@@ -1,23 +1,24 @@
 {
-    "name": "mauro-moreno/silex-jsonapi",
-    "description": "JSONApi.org implementation for Silex framework.",
-    "keywords": ["silex", "jsonapi"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Mauro Moreno",
-            "email": "moreno.mauro.emanuel@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.5.9",
-        "jms/serializer": "^1.1"
-    },
-    "require-dev": {
-        "silex/silex": ">=1",
-        "phpunit/phpunit": ">=5.1"
-    },
-    "autoload": {
-        "psr-4": { "MauroMoreno\\JSONApi\\": "src" }
+  "name": "mauro-moreno/silex-jsonapi",
+  "description": "JSONApi.org implementation for Silex framework.",
+  "keywords": ["silex", "jsonapi"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mauro Moreno",
+      "email": "moreno.mauro.emanuel@gmail.com"
     }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "nilportugues/json-api": "^2.1",
+    "symfony/psr-http-message-bridge": "~0.2"
+  },
+  "require-dev": {
+    "silex/silex": ">=1",
+    "phpunit/phpunit": ">=5.1"
+  },
+  "autoload": {
+    "psr-4": { "MauroMoreno\\SilexJsonApi\\": "src" }
+  }
 }
