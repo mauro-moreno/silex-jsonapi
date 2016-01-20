@@ -1,6 +1,6 @@
 # Silex JSON Api
 
-JSONApi.org implementation for Silex framework. (on development).
+JSONApi.org implementation for Silex framework.
 
 Based on Nil Portugués Caldero PHP Json Api Package [php-json-api](http://github.com/nilportugues/php-json-api).
 
