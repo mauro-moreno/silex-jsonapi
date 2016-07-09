@@ -15,7 +15,7 @@
     "symfony/psr-http-message-bridge": "~0.2"
   },
   "require-dev": {
-    "silex/silex": ">=1",
+    "silex/silex": ">=2",
     "phpunit/phpunit": ">=5.1"
   },
   "autoload": {
