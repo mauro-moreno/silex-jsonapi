@@ -6,11 +6,11 @@
  */
 namespace MauroMoreno\SilexJsonApi;
 
-use NilPortugues\Api\JsonApi\JsonApiSerializer;
-use NilPortugues\Api\JsonApi\JsonApiTransformer;
-use NilPortugues\Api\Mapping\Mapper;
-use Silex\ServiceProviderInterface;
-use Silex\Application;
+use \NilPortugues\Api\JsonApi\JsonApiSerializer;
+use \NilPortugues\Api\JsonApi\JsonApiTransformer;
+use \NilPortugues\Api\Mapping\Mapper;
+use \Pimple\ServiceProviderInterface;
+use \Pimple\Container;
 
 /**
  * Class JSONApiServiceProvider implements ServiceProviderInterface
@@ -22,7 +22,7 @@ class JsonApiServiceProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function register(Application $app)
+    public function register(Container $app)
     {
         $app['jsonapi.mappers'] =
             isset($app['jsonapi.mappers']) ? $app['jsonapi.mappers'] : null;
@@ -40,7 +40,7 @@ class JsonApiServiceProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function boot(Application $app)
+    public function boot(Container $app)
     {
 
     }
