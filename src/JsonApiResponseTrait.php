@@ -2,23 +2,28 @@
 
 namespace MauroMoreno\SilexJsonApi;
 
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use NilPortugues\Api\JsonApi\Http\Response\ResourceCreated;
-use NilPortugues\Api\JsonApi\Http\Response\ResourceDeleted;
-use NilPortugues\Api\JsonApi\Http\Response\ResourceNotFound;
-use NilPortugues\Api\JsonApi\Http\Response\ResourceProcessing;
-use NilPortugues\Api\JsonApi\Http\Response\ResourceUpdated;
-use NilPortugues\Api\JsonApi\Http\Response\Response;
-use NilPortugues\Api\JsonApi\Http\Response\UnsupportedAction;
+use \NilPortugues\Api\JsonApi\Http\Response\BadRequest;
+use \NilPortugues\Api\JsonApi\Http\Response\ResourceCreated;
+use \NilPortugues\Api\JsonApi\Http\Response\ResourceDeleted;
+use \NilPortugues\Api\JsonApi\Http\Response\ResourceNotFound;
+use \NilPortugues\Api\JsonApi\Http\Response\ResourceProcessing;
+use \NilPortugues\Api\JsonApi\Http\Response\ResourceUpdated;
+use \NilPortugues\Api\JsonApi\Http\Response\Response;
+use \NilPortugues\Api\JsonApi\Http\Response\UnprocessableEntity;
+use \NilPortugues\Api\JsonApi\Http\Response\UnsupportedAction;
+use \NilPortugues\Api\JsonApi\Server\Errors\Error;
+use \NilPortugues\Api\JsonApi\Server\Errors\ErrorBag;
+use \Psr\Http\Message\ResponseInterface;
+use \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
 trait JsonApiResponseTrait
 {
     /**
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseInterface $response
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    protected function addHeaders(\Psr\Http\Message\ResponseInterface $response)
+    protected function addHeaders(ResponseInterface $response)
     {
         return $response;
     }
@@ -28,10 +33,11 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function resourceCreatedResponse($json)
+    protected function errorResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new ResourceCreated($json)));
+        $error = new Error('Bad Request', json_decode($json));
+
+        return $this->createResponse(new BadRequest(new ErrorBag([$error])));
     }
 
     /**
@@ -39,10 +45,9 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function resourceDeletedResponse($json)
+    protected function resourceCreatedResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new ResourceDeleted($json)));
+        return $this->createResponse(new ResourceCreated($json));
     }
 
     /**
@@ -50,10 +55,9 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function resourceNotFoundResponse($json)
+    protected function resourceDeletedResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new ResourceNotFound($json)));
+        return $this->createResponse(new ResourceDeleted($json));
     }
 
     /**
@@ -61,10 +65,9 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function resourceProcessingResponse($json)
+    protected function resourceNotFoundResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new ResourceProcessing($json)));
+        return $this->createResponse(new ResourceNotFound($json));
     }
 
     /**
@@ -72,10 +75,11 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function resourceUpdatedResponse($json)
+    protected function resourcePatchErrorResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new ResourceUpdated($json)));
+        $error = new Error('Unprocessable Entity', json_decode($json));
+
+        return $this->createResponse(new UnprocessableEntity([$error]));
     }
 
     /**
@@ -83,10 +87,11 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function response($json)
+    protected function resourcePostErrorResponse($json)
     {
-        return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new Response($json)));
+        $error = new Error('Unprocessable Entity', json_decode($json));
+
+        return $this->createResponse(new UnprocessableEntity([$error]));
     }
 
     /**
@@ -94,9 +99,51 @@ trait JsonApiResponseTrait
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function unsupportedActionResponse($json)
+    protected function resourceProcessingResponse($json)
+    {
+        return $this->createResponse(new ResourceProcessing($json));
+    }
+
+    /**
+     * @param string $json
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function resourceUpdatedResponse($json)
+    {
+        return $this->createResponse(new ResourceUpdated($json));
+    }
+
+    /**
+     * @param string $json
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function response($json)
+    {
+        return $this->createResponse(new Response($json));
+    }
+
+    /**
+     * @param string $json
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function unsupportedActionResponse($json)
+    {
+        $error = new Error('Unsupported Action', json_decode($json));
+
+        return $this->createResponse(new UnsupportedAction([$error]));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function createResponse($data)
     {
         return (new HttpFoundationFactory())
-            ->createResponse($this->addHeaders(new UnsupportedAction($json)));
+            ->createResponse($this->addHeaders($data));
     }
 }
