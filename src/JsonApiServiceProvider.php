@@ -1,6 +1,6 @@
 <?php
 /**
- * Class JSONApiServiceProvider
+ * Class JsonApiServiceProvider
  *
  * @author Mauro Moreno <moreno.mauro.emanuel@gmail.com>
  */
@@ -13,7 +13,7 @@ use \Pimple\ServiceProviderInterface;
 use \Pimple\Container;
 
 /**
- * Class JSONApiServiceProvider implements ServiceProviderInterface
+ * Class JsonApiServiceProvider implements ServiceProviderInterface
  * @package MauroMoreno\SilexJsonApi
  */
 class JsonApiServiceProvider implements ServiceProviderInterface
